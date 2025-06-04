@@ -12,6 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Get current version
+        id: get-version
+        run: echo "version=$(node -p "require('./lib/package.json').version")" >> $GITHUB_OUTPUT
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -23,6 +27,17 @@ jobs:
       - name: Build package
         run: cd lib && npm run build
 
-      - name: Run tests (if available)
-        run: cd lib && npm test || echo "No tests available"
-        continue-on-error: true
+      - name: Generate prerelease version
+        id: prerelease-version
+        run: |
+          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/[^a-zA-Z0-9]/-/g')
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          PRERELEASE_VERSION="${{ steps.get-version.outputs.version }}-${BRANCH_NAME}.${TIMESTAMP}"
+          echo "prerelease_version=${PRERELEASE_VERSION}" >> $GITHUB_OUTPUT
+          # Update package.json with prerelease version
+          cd lib && npm version ${PRERELEASE_VERSION} --no-git-tag-version
+          
+      - name: Publish prerelease to NPM
+        run: npm publish --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
