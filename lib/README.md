@@ -202,3 +202,39 @@ The `JsonLDTransformer` class provides methods for transforming Markdown to JSON
 ## For more information
 
 For full documentation, please see the [main repository README](https://github.com/iunera/json-ld-markdown).
+
+
+## License
+
+We choose fair [code, fair work, fair payment, open collaboration](https://www.license-token.com).
+
+## [Open Compensation Token License](https://www.license-token.com/license/text)
+
+```
+Licensed under the OPEN COMPENSATION TOKEN LICENSE (the "License").
+
+You may not use this file except in compliance with the License.
+
+You may obtain a copy of the License at
+[https://github.com/open-compensation-token-license/license/blob/main/LICENSE.md](https://github.com/open-compensation-token-license/license/blob/main/LICENSE.md)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either expressed or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+@octl.sid: 5fecd757-5fec-d757-d757-00005fb33b80
+```
+
+@octl.sid: [x-octl-sid:5fecd757-5fec-d757-d757-00005fb33b80](https://www.license-token.com/license/new-procurement/x-octl-sid%3A5fecd757-5fec-d757-d757-00005fb33b80)
+
+* Why did we [choose the OCTL as alternative to the BSD 3-Clause License](https://www.license-token.com/wiki/unveiling-bsd-3-clause-license-summary)?
+* Why we [do NOT apply Apache 2.0 License](https://www.license-token.com/wiki/the-downside-of-apache-license-and-why-i-never-would-use-it)?
+
+This project is licensed under the Open Compensation Token License (OCTL), with the unique project identifier
+`x-octl-sid:5fecd757-5fec-d757-d757-00005fb33b80`. The OCTL enables blockchain-based licensing and royalty distribution via NFTs. View the license token
+at [https://www.license-token.com/license/new-procurement/x-octl-sid%3A5fecd757-5fec-d757-d757-00005fb33b80](https://www.license-token.com/license/new-procurement/x-octl-sid%3A5fecd757-5fec-d757-d757-00005fb33b80).
+See the [LICENSE](LICENSE) file or [OCTL license text](https://github.com/open-compensation-token-license/license/blob/main/LICENSE.md) for details. For OCTL
+compliance, ensure contributions are registered with the project’s `x-octl-sid` using the license token link.
+
