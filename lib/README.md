@@ -171,6 +171,8 @@ Additional metadata here...
 
 For more examples, see the [example-articles](https://github.com/iunera/json-ld-markdown/tree/main/example-articles) directory in the main repository.
 
+For a comprehensive example that demonstrates many of the library's features including YAML front matter, FAQ sections, and multiple types, see the [License Token Article example](https://github.com/iunera/json-ld-markdown/blob/main/example-articles/examples_license_token_article.md).
+
 ## API Reference
 
 ### EnhancedMarkdownParser
