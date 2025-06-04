@@ -10,6 +10,37 @@ An extended Markdown format with inline annotations (e.g., `[text]@{Type,propert
 
 This specification is created in formal and precise way, hoping to enable all AI systems to create parsers or transformers for the format.
 
+This project is the based of the [Markdown to Schema.org JSON-LD for AI SEO website](https://markdown-to-jsonld-ai.iunera.com/).
+
+The idea behind this project is to make it easy for developers to transform Markdown content to JSON-LD, which enhances the processability of their content in AI, Large Language Models (LLMs), and Natural Language Web (NLWeb) contexts. Here's an expanded explanation:
+
+### Why JSON-LD Matters for AI and LLMs
+JSON-LD (JavaScript Object Notation for Linked Data) provides structured data that can be more easily understood by machines. When content is transformed from Markdown to JSON-LD:
+1. **Enhanced AI Understanding**: AI systems can better comprehend the semantic meaning of content
+2. **Improved Search Engine Visibility**: Search engines like Google use structured data for rich results
+3. **Better Content Processing**: LLMs can process and reason about structured content more effectively
+4. **Semantic Relationships**: Relationships between content items become explicit rather than implicit
+
+### Key Benefits of the Transformation
+- **Semantic Enrichment**: Adds meaningful context to content through Schema.org vocabularies
+- **Content Discoverability**: Makes content more discoverable by AI systems and search engines
+- **Consistent Structure**: Provides a standardized way to represent Markdown content
+- **AI-Ready Content**: Prepares content for optimal processing by AI and LLMs
+- **Metadata Preservation**: Maintains important metadata from the original Markdown
+
+### Use Cases
+This transformation is particularly valuable for:
+1. **Content Publishers**: Blogs, news sites, and documentation platforms seeking AI visibility
+2. **Knowledge Bases**: Making knowledge repositories more accessible to AI systems
+3. **Technical Documentation**: Enhancing the machine-readability of technical content
+4. **FAQ Systems**: Structuring question-answer pairs for better AI consumption
+5. **Product Information**: Structuring product details for improved search and AI integratio
+
+
+## JavaScript/npm Implementation
+
+For JavaScript developers, we provide an npm package implementation. See the [lib/README.md](lib/README.md) for installation instructions, API reference, and usage examples.
+
 ## Support for Ordinary Markdown Files
 
 The transformer can process any Markdown file. For plain Markdown, it infers minimal metadata:
@@ -451,4 +482,3 @@ This project is licensed under the Open Compensation Token License (OCTL), with 
 at [https://www.license-token.com/license/new-procurement/x-octl-sid%3A5fecd757-5fec-d757-d757-00005fb33b80](https://www.license-token.com/license/new-procurement/x-octl-sid%3A5fecd757-5fec-d757-d757-00005fb33b80).
 See the [LICENSE](LICENSE) file or [OCTL license text](https://github.com/open-compensation-token-license/license/blob/main/LICENSE.md) for details. For OCTL
 compliance, ensure contributions are registered with the project’s `x-octl-sid` using the license token link.
-

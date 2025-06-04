@@ -2,7 +2,33 @@
 
 Transform Markdown to JSON-LD with Advanced Table & Annotation Support for JavaScript developers optimizing for AI.
 
-This [project of iunera](https://www.iunera.com) is the npm package for the [json-ld-markdown](https://github.com/iunera/json-ld-markdown) project. 
+This [project of iunera](https://www.iunera.com) is the npm package for the [json-ld-markdown](https://github.com/iunera/json-ld-markdown) project. This lib is
+powering the Markdown to [Schema.org JSON-LD for AI SEO website](https://markdown-to-jsonld-ai.iunera.com/). 
+
+The idea behind this project is to make it easy for developers to transform Markdown content to JSON-LD, which enhances the processability of their content in AI, Large Language Models (LLMs), and Natural Language Web (NLWeb) contexts. Here's an expanded explanation:
+
+### Why JSON-LD Matters for AI and LLMs
+JSON-LD (JavaScript Object Notation for Linked Data) provides structured data that can be more easily understood by machines. When content is transformed from Markdown to JSON-LD:
+1. **Enhanced AI Understanding**: AI systems can better comprehend the semantic meaning of content
+2. **Improved Search Engine Visibility**: Search engines like Google use structured data for rich results
+3. **Better Content Processing**: LLMs can process and reason about structured content more effectively
+4. **Semantic Relationships**: Relationships between content items become explicit rather than implicit
+
+### Key Benefits of the Transformation
+- **Semantic Enrichment**: Adds meaningful context to content through Schema.org vocabularies
+- **Content Discoverability**: Makes content more discoverable by AI systems and search engines
+- **Consistent Structure**: Provides a standardized way to represent Markdown content
+- **AI-Ready Content**: Prepares content for optimal processing by AI and LLMs
+- **Metadata Preservation**: Maintains important metadata from the original Markdown
+
+### Use Cases
+This transformation is particularly valuable for:
+1. **Content Publishers**: Blogs, news sites, and documentation platforms seeking AI visibility
+2. **Knowledge Bases**: Making knowledge repositories more accessible to AI systems
+3. **Technical Documentation**: Enhancing the machine-readability of technical content
+4. **FAQ Systems**: Structuring question-answer pairs for better AI consumption
+5. **Product Information**: Structuring product details for improved search and AI integratio
+
 
 ## Installation
 
@@ -39,31 +65,31 @@ const jsonLd = window.MarkdownToJsonLd.JsonLDTransformer.transform(markdownConte
     <title>Markdown to JSON-LD Example</title>
 </head>
 <body>
-    <!-- Your HTML content -->
+<!-- Your HTML content -->
 
-    <!-- Include the library from CDN -->
-    <script src="https://unpkg.com/markdown-to-json-ld@1.0.2/dist/markdown-to-json-ld.js"></script>
+<!-- Include the library from CDN -->
+<script src="https://unpkg.com/markdown-to-json-ld@1.0.2/dist/markdown-to-json-ld.js"></script>
 
-    <script>
-        // Your markdown content
-        const markdown = `# My Article\n\nThis is content.`;
+<script>
+    // Your markdown content
+    const markdown = `# My Article\n\nThis is content.`;
 
-        // Configuration
-        const config = {
-            type: 'Article',
-            author: ['John Doe'],
-            publisher: {
-                name: 'Example Publisher',
-                url: 'https://example.com'
-            }
-        };
+    // Configuration
+    const config = {
+        type: 'Article',
+        author: ['John Doe'],
+        publisher: {
+            name: 'Example Publisher',
+            url: 'https://example.com'
+        }
+    };
 
-        // Transform markdown to JSON-LD
-        const jsonLd = window.MarkdownToJsonLd.JsonLDTransformer.transform(markdown, config);
+    // Transform markdown to JSON-LD
+    const jsonLd = window.MarkdownToJsonLd.JsonLDTransformer.transform(markdown, config);
 
-        // Use the result
-        console.log(jsonLd);
-    </script>
+    // Use the result
+    console.log(jsonLd);
+</script>
 </body>
 </html>
 ```
@@ -71,13 +97,14 @@ const jsonLd = window.MarkdownToJsonLd.JsonLDTransformer.transform(markdownConte
 ## Usage
 
 The library provides two main classes:
+
 - `EnhancedMarkdownParser`: Parses Markdown content and extracts various components
 - `JsonLDTransformer`: Transforms the parsed Markdown data into JSON-LD
 
 ### Basic Usage
 
 ```javascript
-import { JsonLDTransformer } from 'markdown-to-json-ld';
+import {JsonLDTransformer} from 'markdown-to-json-ld';
 
 // Your Markdown content
 const markdownContent = `---
@@ -94,18 +121,18 @@ This is the content of my article.`;
 
 // Configuration options
 const config = {
-  baseUrl: 'https://example.com',
-  slug: 'my-article',
-  descriptionLength: 200,
-  type: 'Article',
-  date: '2023-08-15',
-  author: ['John Doe'],
-  publisher: {
-    name: 'Example Publisher',
-    url: 'https://example.com'
-  },
-  keywords: ['example', 'article'],
-  categories: ['Technology']
+    baseUrl: 'https://example.com',
+    slug: 'my-article',
+    descriptionLength: 200,
+    type: 'Article',
+    date: '2023-08-15',
+    author: ['John Doe'],
+    publisher: {
+        name: 'Example Publisher',
+        url: 'https://example.com'
+    },
+    keywords: ['example', 'article'],
+    categories: ['Technology']
 };
 
 // Transform Markdown to JSON-LD
@@ -119,17 +146,17 @@ console.log(JSON.stringify(jsonLd, null, 2));
 
 The `transform` method accepts the following configuration options:
 
-| Option | Type | Description | Default |
-|--------|------|-------------|---------|
-| `baseUrl` | string | Base URL for the article | `'https://example.com'` |
-| `slug` | string | Slug for the article URL | `''` |
-| `descriptionLength` | number | Maximum length for the description | `200` |
-| `type` | string | Type of the article (e.g., 'Article', 'NewsArticle') | `'Article'` |
-| `date` | string | Publication date in ISO format | Current date |
-| `author` | array | Array of author names | `[]` |
-| `publisher` | object | Publisher information | `{}` |
-| `keywords` | array | Keywords for the article | `[]` |
-| `categories` | array | Categories for the article | `[]` |
+| Option              | Type   | Description                                          | Default                 |
+|---------------------|--------|------------------------------------------------------|-------------------------|
+| `baseUrl`           | string | Base URL for the article                             | `'https://example.com'` |
+| `slug`              | string | Slug for the article URL                             | `''`                    |
+| `descriptionLength` | number | Maximum length for the description                   | `200`                   |
+| `type`              | string | Type of the article (e.g., 'Article', 'NewsArticle') | `'Article'`             |
+| `date`              | string | Publication date in ISO format                       | Current date            |
+| `author`            | array  | Array of author names                                | `[]`                    |
+| `publisher`         | object | Publisher information                                | `{}`                    |
+| `keywords`          | array  | Keywords for the article                             | `[]`                    |
+| `categories`        | array  | Categories for the article                           | `[]`                    |
 
 ### Advanced Features
 
@@ -164,9 +191,11 @@ FAQ sections are automatically detected and transformed into a separate `FAQPage
 ## Frequently Asked Questions
 
 ### What is this?
+
 This is an example.
 
 ### How does it work?
+
 It works like this...
 ```
 
@@ -229,7 +258,8 @@ Additional metadata here...
 
 For more examples, see the [example-articles](https://github.com/iunera/json-ld-markdown/tree/main/example-articles) directory in the main repository.
 
-For a comprehensive example that demonstrates many of the library's features including YAML front matter, FAQ sections, and multiple types, see the [License Token Article example](https://github.com/iunera/json-ld-markdown/blob/main/example-articles/examples_license_token_article.md).
+For a comprehensive example that demonstrates many of the library's features including YAML front matter, FAQ sections, and multiple types, see
+the [License Token Article example](https://github.com/iunera/json-ld-markdown/blob/main/example-articles/examples_license_token_article.md).
 
 ## API Reference
 
@@ -260,7 +290,6 @@ The `JsonLDTransformer` class provides methods for transforming Markdown to JSON
 ## For more information
 
 For full documentation, please see the [main repository README](https://github.com/iunera/json-ld-markdown).
-
 
 ## License
 
