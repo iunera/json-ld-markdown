@@ -1,7 +1,5 @@
 // UI Controller
-import { Config } from './config.js';
-import { EnhancedMarkdownParser } from './enhanced-markdown-parser.js';
-import { JsonLDTransformer } from './json-ld-transformer.js';
+import { Config, EnhancedMarkdownParser, JsonLDTransformer } from '../../lib/dist/markdown-to-json-ld.js';
 
 export class UIController {
     constructor() {
