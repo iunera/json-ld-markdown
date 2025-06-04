@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main  # Set this to your default branch
+    paths:
+      - 'website/**'  # Only run when files in website directory or subdirectories change
   workflow_dispatch:  # Allow manual triggering
 
 permissions:
