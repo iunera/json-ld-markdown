@@ -18,7 +18,7 @@ jobs:
           node-version: '24'
 
       - name: Install dependencies
-        run: cd lib && npm ci
+        run: cd lib && npm install
 
       - name: Build package
         run: cd lib && npm run build
