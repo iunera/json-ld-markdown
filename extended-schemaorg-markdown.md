@@ -1,9 +1,10 @@
 # Extended Schema.org Markdown Annotation Format
-A key challenge in exposing stuctured Json-LD data is the effort to create it. 
-We think a key compontent how more semantic data can be exposed for ai training is a simple format howto annotate normal markdown text with stuctured data. 
- 
+
+A key challenge in exposing structured JSON-LD data is the effort required to create it. We believe a simple format for annotating standard Markdown text with structured data is essential for increasing semantic data exposure for AI training and other applications.
+
 ## Overview
-The **Extended Schema.org Markdown Annotation Format** is a proposal of a lightweight extension to Markdown, designed to embed additional Schema.org JSON-LD structured data inline within Markdown documents. It enables semantic tagging of text with Schema.org types for AI-driven applications like NLWeb’s conversational AI. The format supports standard Markdown hyperlinks, nested properties, and entity references. It is compatible with traditional Markdown renderers, which ignore annotations. Specialized renderers generates JSON-LD output for SEO and AI processing.
+
+The **Extended Schema.org Markdown Annotation Format** is a lightweight extension to Markdown, designed to embed Schema.org JSON-LD structured data inline within Markdown documents. It enables semantic tagging of text with Schema.org types, enhancing AI-driven applications like [NLWeb’s conversational AI](https://www.iunera.com/kraken/category/nlweb/)@{SoftwareApplication,@id=#nlweb}. The format supports standard Markdown hyperlinks, nested properties, and entity references. It is fully compatible with traditional Markdown renderers, which ignore annotations, while specialized renderers generate JSON-LD output for SEO, AI processing, and semantic data extraction.
 
 This document provides a detailed description of the syntax, formal specification, and examples, enabling developers and AI systems to create parsers or transformers for the format.
 
@@ -17,7 +18,7 @@ This document provides a detailed description of the syntax, formal specificatio
 - **Behavior**:
   - Sets the `@context` field for all JSON-LD objects generated from annotations.
   - Defaults to `https://schema.org` if absent.
-  - Ignored by traditional Markdown renderers as a comment-like line, rendering as plain text in HTML (e.g., `<p>@context: https://schema.org</p>`).
+  - Ignored by traditional Markdown renderers, rendering as plain text in HTML (e.g., `<p>@context: https://schema.org</p>`).
 - **Constraints**:
   - Only the first `@context` directive is used; subsequent ones are ignored.
   - The `<url>` must be a valid absolute URL starting with `http://` or `https://`.
@@ -53,7 +54,8 @@ This document provides a detailed description of the syntax, formal specificatio
 - **Behavior**:
   - Creates nested JSON-LD objects, automatically inferring `@type` for known nested properties based on the parent type.
   - Mapping:
-    - For `Person`, `address` → `{"@type": "PostalAddress"}`.
+    - For `Person` or `Organization`, `address` → `{"@type": "PostalAddress"}`.
+    - For `CreativeWork`, `author` → `{"@type": "Person"}` or `{"@type": "Organization"}`.
     - For other types, nested objects are plain unless explicitly defined.
   - Example JSON-LD:
     ```json
@@ -70,8 +72,8 @@ This document provides a detailed description of the syntax, formal specificatio
     }
     ```
 - **Constraints**:
-  - Nested properties are typically one level deep (e.g., `address.streetAddress`).
-  - The parser infers `@type` only for predefined nested properties (e.g., `address` for `Person`).
+  - Nested properties are typically one or two levels deep (e.g., `address.streetAddress`).
+  - The parser infers `@type` only for predefined nested properties (e.g., `address` for `Person`, `publisher` for `CreativeWork`).
   - Values must be strings, URLs, or `#reference`.
 
 ### 4. Entity References
@@ -130,14 +132,17 @@ This document provides a detailed description of the syntax, formal specificatio
   - **Annotations**:
     - `[text](url)` renders as `<a href="url">text</a>`.
     - `[text]` renders as plain text (e.g., `<p>John Doe</p>`).
-    - `@{Type,property=value}` is treated as plain text, rendering verbatim (e.g., `<p>NLWeb@{SoftwareApplication,...}</p>`).
+    - `@{Type,property=value}` is treated as plain text, rendering verbatim (e.g., `<p>NLWeb@{...}</p>`).
   - **Ensured Compatibility**:
     - No special Markdown characters (e.g., `*`, `#`) are used in annotations, preventing parsing errors.
     - The syntax leverages square brackets and curly braces, which are safe in CommonMark and GitHub-Flavored Markdown.
     - Nested `[text](url)` within annotations (e.g., `[[NLWeb](url)]@{...}`) renders correctly as a link.
+  - **Rendering Example**:
+    - Markdown: `[Iunera](https://www.iunera.com/)@{Organization,@id=#iunera}`
+    - HTML: `<p><a href="https://www.iunera.com/">Iunera</a>@{Organization,@id=#iunera}</p>`
 
 ### Formal Specification for Parser/Transformer
-The following specification enables an AI to create a parser or transformer for the format.
+The following specification enables developers and AI systems to create a parser or transformer for the format.
 
 #### Grammar (EBNF)
 ```
@@ -161,6 +166,7 @@ NL              ::= "\n"
 1. **Initialize**:
    - Set `context` to `https://schema.org`.
    - Initialize an empty list `jsonLdList` for JSON-LD objects.
+   - Initialize a set `idReferences` to track `@id` values.
 
 2. **Parse Context Directive**:
    - Scan the document’s first line for `@context: <url>`.
@@ -178,20 +184,26 @@ NL              ::= "\n"
        - Set `@context` to `context`.
        - Set `@type` to `Type`.
        - If `name` is not in `properties`, set `name=text`.
+       - If `url` is present and `url` is not a property, set `url=url`.
      - Parse `properties`:
        - Split by commas to get `key=value` pairs.
        - For each pair:
          - Split `key` by dots (e.g., `address.streetAddress` → `["address", "streetAddress"]`).
-         - Create nested objects, setting `@type` for known properties (e.g., `address` → `PostalAddress` for `Person`).
-         - If `value` starts with `#`, set `{@id: value}`.
+         - Create nested objects, setting `@type` for known properties:
+           - `address` → `PostalAddress` for `Person` or `Organization`.
+           - `author` → `Person` or `Organization` for `CreativeWork`.
+           - `publisher` → `Organization` for `CreativeWork`.
+         - If `value` starts with `#`, set `{@id: value}` and add `value` to `idReferences`.
          - If `value` is a URL (starts with `http://` or `https://`), set `{@id: value}`.
          - Otherwise, set `value` as a string.
+       - If `@id` is present, add it to `idReferences`.
      - Add the object to `jsonLdList`.
 
 4. **Validate**:
-   - Check `Type` against a predefined Schema.org type list (e.g., `Person`, `CreativeWork`).
+   - Verify `Type` is a valid Schema.org type (e.g., using a predefined list).
    - Warn if required properties (e.g., `name`) are missing (optional).
-   - Ensure each `#reference` in properties matches an `@id` in `jsonLdList`.
+   - Ensure each `#reference` in `idReferences` matches an `@id` in `jsonLdList`.
+   - Report unmatched references as errors or warnings.
 
 5. **Output**:
    - **HTML**: Render `[text](url)` as `<a>`, `[text]` as text, and embed `jsonLdList` as `<script type="application/ld+json">` tags.
@@ -199,25 +211,141 @@ NL              ::= "\n"
    - **Java Objects**: Map `jsonLdList` to `com.iunera.jsonldjava.schemaorg.metadatatypes` classes using `FieldMapper`.
 
 ### Example Markdown Document
-Below is an example Markdown document illustrating the format’s complete operation, including vocabulary definition, annotations with and without hyperlinks, nested properties, and internal/external references. It’s designed for an Iunera blog post or NLWeb documentation.
+Below is a complete Markdown article illustrating the format’s operation, including vocabulary definition, annotations with and without hyperlinks, nested properties, and internal/external references. It’s designed for an Iunera blog post or NLWeb documentation.
 
 ```markdown
-EXTEND TO BE a complete article
 @context: https://schema.org
 
 # Semantic Data for NLWeb
 
-At [Iunera](https://www.iunera.com/) we use [NLWeb](https://www.iunera.com/kraken/category/nlweb/)@{SoftwareApplication,softwareVersion=1.0,license=https://opensource.org/licenses/MIT,relatedLink=https://github.com/microsoft/NLWeb} to power conversational AI with structured data. The extended schema markdown for Json-LD alloes us to Tag entities like [Iunera]@{Organization,name=Iunera,url=https://www.iunera.com/,@id=#iunera},address.streetAddress=Altrottstraße 31,address.addressLocality=Walldorf,address.postalCode=69190,telephone=+49 6227 381350,openingHours=Monday 09:00-17:00}.
+At [Iunera](https://www.iunera.com/)@{Organization,name=Iunera,url=https://www.iunera.com/,@id=#iunera,address.streetAddress=Altrottstraße 31,address.addressLocality=Walldorf,address.postalCode=69190,telephone=+49 6227 381350,openingHours=Monday 09:00-17:00}, we use [NLWeb](https://www.iunera.com/kraken/category/nlweb/)@{SoftwareApplication,softwareVersion=1.0,license=https://opensource.org/licenses/MIT,relatedLink=https://github.com/microsoft/NLWeb,@id=#nlweb} to power conversational AI with structured data. The extended Schema.org Markdown annotation format allows us to tag entities directly in Markdown, enabling semantic data extraction for AI-driven applications.
 
-The founders of [iunera]@ADDREFERENCEToIUNERA also created solutions for [licensing open software and AI training data](https://license-token.com)@{CreativeWork,keywords=AI;machine learning,license=https://github.com/open-compensation-token-license/license/blob/main/LICENSE.md@id=#ai-training -- add here the authors Dr. tim Frey and christian schmitt} in a more sustainable way.
+The founders of [Iunera]@{Organization,@id=#iunera}, [Dr. Tim Frey]@{Person,givenName=Tim,sameAs=https://www.linkedin.com/in/tim-frey,@id=#tim-frey} and [Christian Schmitt]@{Person,givenName=Christian,sameAs=https://www.linkedin.com/in/christian-schmitt,@id=#christian-schmitt}, also created solutions for [licensing open source software and AI training data](https://license-token.com)@{CreativeWork,keywords=AI;machine learning,license=https://github.com/open-compensation-token-license/octl/blob/main/LICENSE.md,@id=#ai-training,author={@id=#tim-frey},{@id=#christian-schmitt}}. This article explores how [NLWeb]@{SoftwareApplication,@id=#nlweb} leverages structured data and how the extended Markdown format enhances semantic tagging.
 
-*Published on May 31, 2025*
+*Published on May 31, 2025, by [Dr. Tim Frey]@{Person,@id=#tim-frey} and [Christian Schmitt]@{Person,@id=#christian-schmitt}*
+
+## Benefits of Semantic Data
+
+Structured data enhances AI applications by providing machine-readable context. Key benefits include:
+
+- **Improved AI Training**: Tools like [NLWeb]@{SoftwareApplication,@id=#nlweb} use JSON-LD for [conversational AI training](https://www.iunera.com/kraken/machine-learning-ai/)@{CreativeWork,keywords=AI;training,@id=#ai-conversational}.
+- **SEO Optimization**: Schema.org annotations improve search engine snippets.
+- **Interoperability**: Data is reusable across platforms, such as [GitHub](https://github.com/)@{SoftwareSourceCode,@id=#github}.
+
+## How It Works
+
+The extended Markdown format embeds Schema.org annotations directly in text. For example, tagging [Iunera]@{Organization,@id=#iunera} generates a JSON-LD object with nested properties like `address`. The process involves:
+
+1. **Annotation**: Add `@{Type,property=value}` after text or links.
+2. **Parsing**: A transformer (e.g., `markdown-to-structured-jsonld`) extracts annotations.
+3. **Output**: JSON-LD is generated for AI or SEO use.
+
+## Frequently Asked Questions
+
+### What is the extended Markdown format?
+A lightweight Markdown extension for embedding Schema.org JSON-LD annotations, developed by [Iunera]@{Organization,@id=#iunera}.
+
+### How does NLWeb use structured data?
+[NLWeb]@{SoftwareApplication,@id=#nlweb} leverages JSON-LD for conversational AI, improving response accuracy.
+
+### Who created this format?
+[Dr. Tim Frey]@{Person,@id=#tim-frey} and [Christian Schmitt]@{Person,@id=#christian-schmitt} at [Iunera]@{Organization,@id=#iunera}.
 ```
 
 ### Example JSON-LD Output
-The document generates the following JSON-LD when processed by a parser (e.g., updated `markdown-it-schemaorg`):
+The document generates the following JSON-LD when processed by a parser (e.g., updated `markdown-to-structured-jsonld`):
 
 ```json
-show the complete article outout
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "#iunera",
+    "name": "Iunera",
+    "url": "https://www.iunera.com/",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Altrottstraße 31",
+      "addressLocality": "Walldorf",
+      "postalCode": "69190"
+    },
+    "telephone": "+49 6227 381350",
+    "openingHours": "Monday 09:00-17:00"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": "#nlweb",
+    "name": "NLWeb",
+    "softwareVersion": "1.0",
+    "license": { "@id": "https://opensource.org/licenses/MIT" },
+    "relatedLink": { "@id": "https://github.com/microsoft/NLWeb" }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "#tim-frey",
+    "name": "Dr. Tim Frey",
+    "givenName": "Tim",
+    "sameAs": "https://www.linkedin.com/in/tim-frey"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "#christian-schmitt",
+    "name": "Christian Schmitt",
+    "givenName": "Christian",
+    "sameAs": "https://www.linkedin.com/in/christian-schmitt"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": "#ai-training",
+    "name": "licensing open source software and AI training data",
+    "keywords": ["AI", "machine learning"],
+    "license": { "@id": "https://github.com/open-compensation-token-license/octl/blob/main/LICENSE.md" },
+    "author": [
+      { "@id": "#tim-frey" },
+      { "@id": "#christian-schmitt" }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": "#ai-conversational",
+    "name": "conversational AI training",
+    "keywords": ["AI", "training"]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "@id": "#github",
+    "name": "GitHub"
+  }
+]
 ```
 
+## Integration with markdown-to-structured-jsonld
+
+The extended format integrates seamlessly with the `markdown-to-structured-jsonld` transformer. Key considerations:
+
+- **Annotation Parsing**: The `EnhancedMarkdownParser` class handles `@{Type,property=value}` via the `extractAnnotations` method, supporting nested properties and references.
+- **Context Handling**: The `@context` directive is processed by `extractContext`, defaulting to `https://schema.org`.
+- **Output Generation**: The `JsonLDTransformer` includes annotated entities in the JSON-LD array, preserving internal `#reference` links.
+- **Compatibility**: Non-annotated Markdown renders normally, while annotations are extracted for JSON-LD.
+
+To use with the provided HTML interface:
+1. Save the example Markdown as `extended_example.md`.
+2. Load it via a new button in the HTML (e.g., modify `loadSampleContent` to fetch `extended_example.md`).
+3. Verify the JSON-LD output matches the example above.
+
+## Future Extensions
+- **Multi-Context Support**: Allow multiple `@context` directives for mixed vocabularies (e.g., Schema.org, Dublin Core).
+- **Rich Property Values**: Support JSON-like values (e.g., arrays, objects) in annotations.
+- **Annotation Scoping**: Define annotations for entire sections (e.g., via `## Heading @{Type,...}`).
+- **Validation Tools**: Develop linters to check Schema.org property validity and reference consistency.
+
+## Conclusion
+The Extended Schema.org Markdown Annotation Format simplifies embedding structured data in Markdown, enabling semantic tagging for AI, SEO, and interoperability. By leveraging standard Markdown syntax, it ensures compatibility while providing powerful annotation capabilities. Developers and AI systems can use this specification to build parsers, enhancing data-driven applications like [NLWeb]@{SoftwareApplication,@id=#nlweb}.
+
+*Last updated: June 4, 2025*
