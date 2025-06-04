@@ -34,6 +34,7 @@ export default {
 
 export class UIController {
     constructor() {
+            this.isUpdatingMarkdown = false;
         this.initializeElements();
         this.setupEventListeners();
         this.setDefaultDate();
@@ -56,7 +57,7 @@ export class UIController {
         this.slugInput = document.getElementById('slug');
         this.dateInput = document.getElementById('date');
         this.categoriesInput = document.getElementById('categories');
-        this.descLengthInput = document.getElementById('descLength');
+        this.descriptionInput = document.getElementById('description');
         this.copyButton = document.getElementById('copyButton');
         this.formatButton = document.getElementById('formatButton');
         this.loadSampleButton = document.getElementById('loadSample');
@@ -86,7 +87,7 @@ export class UIController {
         const inputs = [
             this.markdownInput, this.typeInput, this.authorInput,
             this.publisherNameInput, this.publisherUrlInput, this.baseUrlInput,
-            this.slugInput, this.dateInput, this.categoriesInput, this.descLengthInput
+            this.slugInput, this.dateInput, this.categoriesInput, this.descriptionInput
         ].filter(input => input !== null);
 
         inputs.forEach(input => {
@@ -124,7 +125,7 @@ export class UIController {
 
     updateTransformation() {
         try {
-            const markdown = (this.markdownInput && this.markdownInput.value) ? this.markdownInput.value : "";
+            let markdown = (this.markdownInput && this.markdownInput.value) ? this.markdownInput.value : "";
 
             if (!markdown.trim()) {
                 if (this.output) this.output.textContent = '// Enter markdown content to see JSON-LD output';
@@ -135,6 +136,14 @@ export class UIController {
             }
 
             this.populateUIFromYAML(markdown);
+
+            // Only update the markdown from UI if we're not already updating the markdown
+            if (!this.isUpdatingMarkdown) {
+                this.updateMarkdownFromUI();
+                // Get the updated markdown after updating from UI
+                markdown = (this.markdownInput && this.markdownInput.value) ? this.markdownInput.value : "";
+            }
+
             const config = this.buildConfig();
 
             // Access the classes from the global MarkdownToJsonLd object
@@ -186,6 +195,7 @@ export class UIController {
         if (this.baseUrlInput && this.baseUrlInput.value !== undefined) this.baseUrlInput.value = "";
         if (this.slugInput && this.slugInput.value !== undefined) this.slugInput.value = "";
         if (this.categoriesInput && this.categoriesInput.value !== undefined) this.categoriesInput.value = "";
+        if (this.descriptionInput && this.descriptionInput.value !== undefined) this.descriptionInput.value = "";
         if (this.typeInput && this.typeInput.value !== undefined) this.typeInput.value = "Article";
     }
 
@@ -244,6 +254,83 @@ export class UIController {
                 this.categoriesInput.value = metadata.categories.join(', ');
             }
         }
+
+        if (this.descriptionInput && this.descriptionInput.value !== undefined && !this.descriptionInput.value.trim()) {
+            if (metadata.description) {
+                this.descriptionInput.value = metadata.description;
+            }
+        }
+    }
+
+    updateMarkdownFromUI() {
+        if (!this.markdownInput || !this.markdownInput.value) {
+            return;
+        }
+
+        const markdown = this.markdownInput.value;
+        const EnhancedMarkdownParser = window.MarkdownToJsonLd.EnhancedMarkdownParser;
+        const parser = new EnhancedMarkdownParser();
+        const metadata = parser.extractMetadata(markdown);
+
+        // If there's no YAML front matter, don't try to update it
+        if (!metadata || Object.keys(metadata).length === 0) {
+            return;
+        }
+
+        // Update metadata with values from UI fields
+        if (this.typeInput && this.typeInput.value) {
+            metadata.type = this.typeInput.value;
+        }
+
+        if (this.authorInput && this.authorInput.value) {
+            metadata.author = this.authorInput.value.split(',').map(a => a.trim()).filter(a => a);
+        }
+
+        if (this.publisherNameInput && this.publisherNameInput.value) {
+            if (!metadata.publisher) {
+                metadata.publisher = {};
+            }
+            metadata.publisher.name = this.publisherNameInput.value;
+        }
+
+        if (this.publisherUrlInput && this.publisherUrlInput.value) {
+            if (!metadata.publisher) {
+                metadata.publisher = {};
+            }
+            metadata.publisher.url = this.publisherUrlInput.value;
+        }
+
+        if (this.baseUrlInput && this.baseUrlInput.value) {
+            metadata.base_url = this.baseUrlInput.value;
+        }
+
+        if (this.slugInput && this.slugInput.value) {
+            metadata.slug = this.slugInput.value;
+        }
+
+        if (this.dateInput && this.dateInput.value) {
+            metadata.date = this.dateInput.value;
+        }
+
+        if (this.categoriesInput && this.categoriesInput.value) {
+            metadata.categories = this.categoriesInput.value.split(',').map(c => c.trim()).filter(c => c);
+        }
+
+        if (this.descriptionInput && this.descriptionInput.value) {
+            metadata.description = this.descriptionInput.value;
+        }
+
+        // Convert metadata back to YAML
+        const jsyaml = window.jsyaml;
+        const yamlContent = jsyaml.dump(metadata);
+
+        // Replace the YAML front matter in the markdown
+        const updatedMarkdown = markdown.replace(/^---\n[\s\S]*?\n---\n/, `---\n${yamlContent}---\n`);
+
+        // Update the markdown input without triggering the input event
+        this.isUpdatingMarkdown = true;
+        this.markdownInput.value = updatedMarkdown;
+        this.isUpdatingMarkdown = false;
     }
 
     buildConfig() {
@@ -304,7 +391,7 @@ export class UIController {
             categories: (this.categoriesInput && this.categoriesInput.value)
                 ? this.categoriesInput.value.split(',').map(c => c.trim()).filter(c => c)
                 : metadata.categories || Config.DEFAULT_CATEGORIES,
-            descriptionLength: parseInt(this.descLengthInput && this.descLengthInput.value) || Config.DEFAULT_DESCRIPTION_LENGTH
+            description: (this.descriptionInput && this.descriptionInput.value) || metadata.description || null
         });
     }
 
@@ -408,6 +495,7 @@ categories:
   - Technology
   - Software Licensing
   - Blockchain Innovation
+description: "Revolutionizing open source software with the License Token model to ensure fair compensation for developers through blockchain technology."
 ---
 
 # License Token: Pioneering Fair Code and Combating Open Source Exploitation
@@ -455,7 +543,6 @@ Currently supports Ethereum, Polygon, and other EVM-compatible networks with pla
 
 --- end of article`;
 
-        this.clearUIFields();
         if (this.markdownInput && this.markdownInput.value !== undefined) {
             this.markdownInput.value = sampleMarkdown;
         }
@@ -485,6 +572,7 @@ categories:
   - Tutorial
   - Implementation
   - Blockchain
+description: "A step-by-step guide to integrating the Open Compensation Token License into your software project for fair compensation through blockchain technology."
 ---
 
 # How to Implement OCTL in Your Project
@@ -557,7 +645,6 @@ Deployment costs vary by network. Check current rates on blockchain explorer web
 
 --- end of article`;
 
-        this.clearUIFields();
         if (this.markdownInput && this.markdownInput.value !== undefined) {
             this.markdownInput.value = howToMarkdown;
         }
@@ -586,6 +673,7 @@ keywords:
 categories:
   - Data Analysis
   - Technology Comparison
+description: "A comprehensive demonstration of various table types and how they map to schema.org structured data for improved SEO and AI content understanding."
 ---
 
 # Comprehensive Table Examples for Schema.org Mapping
@@ -640,7 +728,6 @@ Each table type will be automatically detected and mapped to appropriate schema.
 
 --- end of article`;
 
-        this.clearUIFields();
         if (this.markdownInput && this.markdownInput.value !== undefined) {
             this.markdownInput.value = tableMarkdown;
         }

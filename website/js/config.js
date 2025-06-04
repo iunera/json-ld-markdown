@@ -50,6 +50,7 @@ export class Config {
         this.slug = options.slug || Config.DEFAULT_SLUG;
         this.keywords = options.keywords || [...Config.DEFAULT_KEYWORDS];
         this.categories = options.categories || [...Config.DEFAULT_CATEGORIES];
-        this.descriptionLength = options.descriptionLength || Config.DEFAULT_DESCRIPTION_LENGTH;
+        this.description = options.description || null;
+        this.descriptionLength = 200; // Fixed at 200 words if no description provided
     }
 }
