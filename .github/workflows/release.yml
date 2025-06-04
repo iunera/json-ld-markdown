@@ -1,4 +1,5 @@
-name: Release
+name: Release Workflow
+
 
 on:
   push:
@@ -8,47 +9,58 @@ on:
       - 'lib/package.json'
 
 jobs:
-  release:
+  check-version-change:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+      changed: ${{ steps.check-version.outputs.changed }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+
+      - name: Get current version
+        id: get-version
+        run: echo "version=$(node -p "require('./lib/package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Check if version changed
+        id: check-version
+        run: |
+          git fetch --tags
+          # Check if tag already exists for this version
+          if git tag -l "v${{ steps.get-version.outputs.version }}" | grep -q .; then
+            echo "Version v${{ steps.get-version.outputs.version }} already exists as a tag"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "Version v${{ steps.get-version.outputs.version }} is new"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+  release:
+    needs: check-version-change
+    runs-on: ubuntu-latest
+    if: needs.check-version-change.outputs.changed == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '24'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: cd lib && npm install
 
-      - name: Get version from package.json
-        id: package-version
-        run: |
-          VERSION=$(node -p "require('./lib/package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Check if version exists as a tag
-        id: check-tag
-        run: |
-          if git tag -l "v${{ steps.package-version.outputs.version }}" | grep -q "v${{ steps.package-version.outputs.version }}"; then
-            echo "Version ${{ steps.package-version.outputs.version }} already exists as a tag"
-            exit 1
-          fi
-
-      - name: Check if version exists on npm
-        id: check-npm
-        run: |
-          if npm view markdown-to-json-ld@${{ steps.package-version.outputs.version }} version &> /dev/null; then
-            echo "Version ${{ steps.package-version.outputs.version }} already exists on npm"
-            exit 1
-          fi
-
       - name: Build package
         run: cd lib && npm run build
+
+      - name: Create Git tag
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "v${{ needs.check-version-change.outputs.version }}" -m "Release v${{ needs.check-version-change.outputs.version }}"
+          git push origin "v${{ needs.check-version-change.outputs.version }}"
 
       - name: Publish to npm
         run: cd lib && npm publish
@@ -58,8 +70,10 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.package-version.outputs.version }}
-          name: Release v${{ steps.package-version.outputs.version }}
+          tag_name: v${{ needs.check-version-change.outputs.version }}
+          name: Release v${{ needs.check-version-change.outputs.version }}
+          draft: false
+          prerelease: false
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
