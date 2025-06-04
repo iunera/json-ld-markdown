@@ -1,7 +1,19 @@
 // UI Controller
 import { Config } from './config.js';
-import { EnhancedMarkdownParser } from './enhanced-markdown-parser.js';
-import { JsonLDTransformer } from './json-ld-transformer.js';
+// Import the library directly as a script in index.html and access it as a global variable
+// The library will be available as window.MarkdownToJsonLd
+
+// Default export for convenience
+export default {
+    EnhancedMarkdownParser: window.MarkdownToJsonLd.EnhancedMarkdownParser,
+    JsonLDTransformer: window.MarkdownToJsonLd.JsonLDTransformer,
+
+    // Helper function to transform markdown to JSON-LD
+    transform: (markdown, config) => {
+        return window.MarkdownToJsonLd.JsonLDTransformer.transform(markdown, config);
+    }
+};
+
 
 export class UIController {
     constructor() {
@@ -35,12 +47,12 @@ export class UIController {
         this.loadTableSampleButton = document.getElementById('loadTableSample');
         this.charCount = document.getElementById('charCount');
         this.outputInfo = document.getElementById('outputInfo');
-        
+
         this.annotationCount = document.getElementById('annotationCount');
         this.faqCount = document.getElementById('faqCount');
         this.sectionCount = document.getElementById('sectionCount');
         this.entityCount = document.getElementById('entityCount');
-        
+
         this.inputStatus = document.getElementById('inputStatus');
         this.outputStatus = document.getElementById('outputStatus');
     }
@@ -96,7 +108,7 @@ export class UIController {
     updateTransformation() {
         try {
             const markdown = (this.markdownInput && this.markdownInput.value) ? this.markdownInput.value : "";
-            
+
             if (!markdown.trim()) {
                 if (this.output) this.output.textContent = '// Enter markdown content to see JSON-LD output';
                 this.setStatus(this.outputStatus, 'success');
@@ -107,8 +119,13 @@ export class UIController {
 
             this.populateUIFromYAML(markdown);
             const config = this.buildConfig();
+
+            // Access the classes from the global MarkdownToJsonLd object
+            const JsonLDTransformer = window.MarkdownToJsonLd.JsonLDTransformer;
+            const EnhancedMarkdownParser = window.MarkdownToJsonLd.EnhancedMarkdownParser;
+
             const result = JsonLDTransformer.transform(markdown, config);
-            
+
             const parser = new EnhancedMarkdownParser();
             const annotations = parser.extractAnnotations(markdown);
             const faqQuestions = parser.extractFaqQuestions(markdown);
@@ -117,22 +134,22 @@ export class UIController {
             const lists = parser.extractLists(markdown);
             const links = parser.extractLinks(markdown);
             const wordCount = this.countWords(markdown);
-            
+
             this.updateStats(annotations.length, faqQuestions.length, result.length, wordCount);
-            
+
             if (this.output) {
                 this.output.textContent = JSON.stringify(result, null, 2);
                 if (window.hljs) {
                     window.hljs.highlightElement(this.output);
                 }
             }
-            
+
             if (this.outputInfo) {
                 this.outputInfo.textContent = `Generated ${result.length} JSON-LD entities`;
             }
             this.setStatus(this.outputStatus, 'success');
             this.setStatus(this.inputStatus, 'success');
-            
+
         } catch (error) {
             if (this.output) {
                 this.output.textContent = `Error: ${error.message}\n\nStack trace:\n${error.stack}`;
@@ -156,9 +173,11 @@ export class UIController {
     }
 
     populateUIFromYAML(markdown) {
+        // Access the class from the global MarkdownToJsonLd object
+        const EnhancedMarkdownParser = window.MarkdownToJsonLd.EnhancedMarkdownParser;
         const parser = new EnhancedMarkdownParser();
         const metadata = parser.extractMetadata(markdown);
-        
+
         if (!metadata || Object.keys(metadata).length === 0) {
             return;
         }
@@ -166,43 +185,43 @@ export class UIController {
         if (this.typeInput && this.typeInput.value !== undefined && (!this.typeInput.value || this.typeInput.value === "Article")) {
             this.typeInput.value = metadata.type || "Article";
         }
-        
+
         if (this.authorInput && this.authorInput.value !== undefined && !this.authorInput.value.trim()) {
             if (metadata.author && Array.isArray(metadata.author)) {
                 this.authorInput.value = metadata.author.join(', ');
             }
         }
-        
+
         if (this.publisherNameInput && this.publisherNameInput.value !== undefined && !this.publisherNameInput.value.trim()) {
             if (metadata.publisher && metadata.publisher.name) {
                 this.publisherNameInput.value = metadata.publisher.name;
             }
         }
-        
+
         if (this.publisherUrlInput && this.publisherUrlInput.value !== undefined && !this.publisherUrlInput.value.trim()) {
             if (metadata.publisher && metadata.publisher.url) {
                 this.publisherUrlInput.value = metadata.publisher.url;
             }
         }
-        
+
         if (this.baseUrlInput && this.baseUrlInput.value !== undefined && !this.baseUrlInput.value.trim()) {
             if (metadata.base_url) {
                 this.baseUrlInput.value = metadata.base_url;
             }
         }
-        
+
         if (this.slugInput && this.slugInput.value !== undefined && !this.slugInput.value.trim()) {
             if (metadata.slug) {
                 this.slugInput.value = metadata.slug;
             }
         }
-        
+
         if (this.dateInput && this.dateInput.value !== undefined && !this.dateInput.value) {
             if (metadata.date) {
                 this.dateInput.value = metadata.date;
             }
         }
-        
+
         if (this.categoriesInput && this.categoriesInput.value !== undefined && !this.categoriesInput.value.trim()) {
             if (metadata.categories && Array.isArray(metadata.categories)) {
                 this.categoriesInput.value = metadata.categories.join(', ');
@@ -212,6 +231,8 @@ export class UIController {
 
     buildConfig() {
         const markdown = this.markdownInput && this.markdownInput.value ? this.markdownInput.value : "";
+        // Access the class from the global MarkdownToJsonLd object
+        const EnhancedMarkdownParser = window.MarkdownToJsonLd.EnhancedMarkdownParser;
         const parser = new EnhancedMarkdownParser();
         const metadata = parser.extractMetadata(markdown);
 
@@ -219,7 +240,7 @@ export class UIController {
         const uiAuthors = this.authorInput && this.authorInput.value
             ? this.authorInput.value.split(',').map(a => a.trim()).filter(a => a)
             : [];
-        
+
         if (uiAuthors.length > 0) {
             authors = uiAuthors;
         } else if (metadata.author && Array.isArray(metadata.author)) {
@@ -231,7 +252,7 @@ export class UIController {
         const publisherName = this.publisherNameInput && this.publisherNameInput.value
             ? this.publisherNameInput.value
             : (metadata.publisher && metadata.publisher.name) || Config.DEFAULT_PUBLISHER.name;
-        
+
         const publisherUrl = this.publisherUrlInput && this.publisherUrlInput.value
             ? this.publisherUrlInput.value
             : (metadata.publisher && metadata.publisher.url) || Config.DEFAULT_PUBLISHER.url;
@@ -271,20 +292,22 @@ export class UIController {
     }
 
     updateStats(annotations, faqs, entities, words) {
+        // Access the class from the global MarkdownToJsonLd object
+        const EnhancedMarkdownParser = window.MarkdownToJsonLd.EnhancedMarkdownParser;
         const parser = new EnhancedMarkdownParser();
         const markdownValue = (this.markdownInput && this.markdownInput.value) ? this.markdownInput.value : "";
         const sections = parser.extractSections(markdownValue);
         const tables = parser.extractTables(markdownValue);
         const lists = parser.extractLists(markdownValue);
-        
+
         if (this.annotationCount) this.annotationCount.textContent = annotations;
         if (this.faqCount) this.faqCount.textContent = faqs;
         if (this.sectionCount) this.sectionCount.textContent = sections.length;
         if (this.entityCount) this.entityCount.textContent = entities;
-        
+
         const tableCountElement = document.getElementById('tableCount');
         const listCountElement = document.getElementById('listCount');
-        
+
         if (tableCountElement) tableCountElement.textContent = tables.length;
         if (listCountElement) listCountElement.textContent = lists.length;
     }
@@ -607,4 +630,11 @@ Each table type will be automatically detected and mapped to appropriate schema.
         this.updateCharCount();
         this.updateTransformation();
     }
+}
+
+// Initialize the application when the DOM is loaded
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        new UIController();
+    });
 }
