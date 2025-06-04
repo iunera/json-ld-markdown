@@ -38,6 +38,6 @@ jobs:
           cd lib && npm version ${PRERELEASE_VERSION} --no-git-tag-version
           
       - name: Publish prerelease to NPM
-        run: npm publish --dry-run
+        run: cd lib && npm publish --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
