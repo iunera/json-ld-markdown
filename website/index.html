@@ -1,3 +1,20 @@
+<!--
+  ~ Copyright (C) 2025.  Tim Frey, Christian Schmitt
+  ~
+  ~ Licensed under the OPEN COMPENSATION TOKEN LICENSE (the "License").
+  ~ You may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at <a href="https://www.license-token.com/license/text">https://www.license-token.com/license/text</a>
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either expressed or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  ~ @octl.sid: 5fecd757-5fec-d757-d757-00005fb33b80
+  ~
+  -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,25 +32,37 @@
             border-radius: 0.5rem;
             padding: 1rem;
         }
+
         .fade-in {
             animation: fadeIn 0.3s ease-in;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .glass {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
+
         textarea, input, select {
             transition: all 0.2s ease;
         }
+
         textarea:focus, input:focus, select:focus {
             transform: scale(1.01);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
+
         .status-indicator {
             width: 8px;
             height: 8px;
@@ -41,203 +70,213 @@
             display: inline-block;
             margin-left: 8px;
         }
-        .status-success { background-color: #10b981; }
-        .status-error { background-color: #ef4444; }
-        .status-processing { background-color: #f59e0b; animation: pulse 1s infinite; }
+
+        .status-success {
+            background-color: #10b981;
+        }
+
+        .status-error {
+            background-color: #ef4444;
+        }
+
+        .status-processing {
+            background-color: #f59e0b;
+            animation: pulse 1s infinite;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
-        <div class="container mx-auto px-6 py-4">
-            <h1 class="text-3xl font-bold text-center">Enhanced Metadata Extractor</h1>
-            <p class="text-center text-blue-100 mt-2">Transform Markdown to JSON-LD with Advanced Table & Annotation Support</p>
-        </div>
-    </header>
+<!-- Header -->
+<header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
+    <div class="container mx-auto px-6 py-4">
+        <h1 class="text-3xl font-bold text-center">Enhanced Metadata Extractor</h1>
+        <p class="text-center text-blue-100 mt-2">Transform Markdown to JSON-LD with Advanced Table & Annotation Support</p>
+    </div>
+</header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-6 py-8">
-        <!-- Configuration Panel -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                ⚙️ Configuration
-                <span id="configStatus" class="status-indicator status-success"></span>
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-                <div>
-                    <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Schema Type</label>
-                    <select id="type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="Article" selected>Article</option>
-                        <option value="NewsArticle">NewsArticle</option>
-                        <option value="BlogPosting">BlogPosting</option>
-                        <option value="TechArticle">TechArticle</option>
-                        <option value="ScholarlyArticle">ScholarlyArticle</option>
-                        <option value="HowTo">HowTo</option>
-                        <option value="Report">Report</option>
-                        <option value="SocialMediaPosting">SocialMediaPosting</option>
-                        <option value="MedicalScholarlyArticle">MedicalScholarlyArticle</option>
-                        <option value="SatiricalArticle">SatiricalArticle</option>
-                        <option value="AdvertiserContentArticle">AdvertiserContentArticle</option>
-                        <option value="WebPage">WebPage</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="author" class="block text-sm font-medium text-gray-700 mb-2">Authors</label>
-                    <input type="text" id="author" placeholder="John Doe, Jane Smith" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label for="publisherName" class="block text-sm font-medium text-gray-700 mb-2">Publisher</label>
-                    <input type="text" id="publisherName" placeholder="Your Organization" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label for="publisherUrl" class="block text-sm font-medium text-gray-700 mb-2">Publisher URL</label>
-                    <input type="url" id="publisherUrl" placeholder="https://example.com" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label for="baseUrl" class="block text-sm font-medium text-gray-700 mb-2">Base URL</label>
-                    <input type="url" id="baseUrl" placeholder="https://example.com/blog/" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Article Slug</label>
-                    <input type="text" id="slug" placeholder="my-article-title" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
+<!-- Main Content -->
+<main class="container mx-auto px-6 py-8">
+    <!-- Configuration Panel -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            ⚙️ Configuration
+            <span id="configStatus" class="status-indicator status-success"></span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+            <div>
+                <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Schema Type</label>
+                <select id="type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="Article" selected>Article</option>
+                    <option value="NewsArticle">NewsArticle</option>
+                    <option value="BlogPosting">BlogPosting</option>
+                    <option value="TechArticle">TechArticle</option>
+                    <option value="ScholarlyArticle">ScholarlyArticle</option>
+                    <option value="HowTo">HowTo</option>
+                    <option value="Report">Report</option>
+                    <option value="SocialMediaPosting">SocialMediaPosting</option>
+                    <option value="MedicalScholarlyArticle">MedicalScholarlyArticle</option>
+                    <option value="SatiricalArticle">SatiricalArticle</option>
+                    <option value="AdvertiserContentArticle">AdvertiserContentArticle</option>
+                    <option value="WebPage">WebPage</option>
+                </select>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                <div>
-                    <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Publication Date</label>
-                    <input type="date" id="date" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label for="categories" class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
-                    <input type="text" id="categories" placeholder="Technology, AI, Innovation" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label for="descLength" class="block text-sm font-medium text-gray-700 mb-2">Description Length</label>
-                    <input type="number" id="descLength" value="300" min="50" max="1000" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
+            <div>
+                <label for="author" class="block text-sm font-medium text-gray-700 mb-2">Authors</label>
+                <input type="text" id="author" placeholder="John Doe, Jane Smith"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label for="publisherName" class="block text-sm font-medium text-gray-700 mb-2">Publisher</label>
+                <input type="text" id="publisherName" placeholder="Your Organization"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label for="publisherUrl" class="block text-sm font-medium text-gray-700 mb-2">Publisher URL</label>
+                <input type="url" id="publisherUrl" placeholder="https://example.com"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label for="baseUrl" class="block text-sm font-medium text-gray-700 mb-2">Base URL</label>
+                <input type="url" id="baseUrl" placeholder="https://example.com/blog/"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Article Slug</label>
+                <input type="text" id="slug" placeholder="my-article-title"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             </div>
         </div>
 
-        <!-- Main Processing Area -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Input Panel -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="bg-gray-50 px-6 py-4 border-b">
-                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                        📝 Markdown Input
-                        <span id="inputStatus" class="status-indicator status-success"></span>
-                    </h3>
-                    <p class="text-sm text-gray-600 mt-1">Enter your markdown with YAML front matter and inline annotations, or use the sample buttons below</p>
-                </div>
-                <div class="p-6">
-                    <textarea id="markdownInput" rows="25" 
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            <div>
+                <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Publication Date</label>
+                <input type="date" id="date"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label for="categories" class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
+                <input type="text" id="categories" placeholder="Technology, AI, Innovation"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label for="descLength" class="block text-sm font-medium text-gray-700 mb-2">Description Length</label>
+                <input type="number" id="descLength" value="300" min="50" max="1000"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Processing Area -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Input Panel -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-gray-50 px-6 py-4 border-b">
+                <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                    📝 Markdown Input
+                    <span id="inputStatus" class="status-indicator status-success"></span>
+                </h3>
+                <p class="text-sm text-gray-600 mt-1">Enter your markdown with YAML front matter and inline annotations, or use the sample buttons below</p>
+            </div>
+            <div class="p-6">
+                    <textarea id="markdownInput" rows="25"
                               class="w-full font-mono text-sm border border-gray-300 rounded-lg p-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                               placeholder="Enter your markdown content here..."></textarea>
-                    <div class="mt-4 flex items-center justify-between">
-                        <div class="flex gap-2">
-                            <button id="loadSample" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                                Article Sample
-                            </button>
-                            <button id="loadHowToSample" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
-                                HowTo Sample
-                            </button>
-                            <button id="loadTableSample" class="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
-                                Table Sample
-                            </button>
-                        </div>
-                        <div class="text-sm text-gray-500">
-                            <span id="charCount">0</span> characters
-                        </div>
+                <div class="mt-4 flex items-center justify-between">
+                    <div class="flex gap-2">
+                        <button id="loadSample" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                            Article Sample
+                        </button>
+                        <button id="loadHowToSample" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
+                            HowTo Sample
+                        </button>
+                        <button id="loadTableSample" class="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
+                            Table Sample
+                        </button>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        <span id="charCount">0</span> characters
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Output Panel -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="bg-gray-50 px-6 py-4 border-b">
-                    <h3 class="text-lg font-semibold text-gray-800 flex items-center justify-between">
+        <!-- Output Panel -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-gray-50 px-6 py-4 border-b">
+                <h3 class="text-lg font-semibold text-gray-800 flex items-center justify-between">
                         <span class="flex items-center">
                             🔗 JSON-LD Output
                             <span id="outputStatus" class="status-indicator status-success"></span>
                         </span>
-                        <div class="flex gap-2">
-                            <button id="formatButton" class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors">
-                                Format
-                            </button>
-                            <button id="copyButton" class="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors">
-                                Copy
-                            </button>
-                        </div>
-                    </h3>
-                    <p class="text-sm text-gray-600 mt-1">Generated structured data in JSON-LD format</p>
+                    <div class="flex gap-2">
+                        <button id="formatButton" class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors">
+                            Format
+                        </button>
+                        <button id="copyButton" class="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors">
+                            Copy
+                        </button>
+                    </div>
+                </h3>
+                <p class="text-sm text-gray-600 mt-1">Generated structured data in JSON-LD format</p>
+            </div>
+            <div class="p-6">
+                <div class="bg-gray-900 rounded-lg overflow-hidden">
+                    <pre><code id="output" class="language-json text-sm"></code></pre>
                 </div>
-                <div class="p-6">
-                    <div class="bg-gray-900 rounded-lg overflow-hidden">
-                        <pre><code id="output" class="language-json text-sm"></code></pre>
-                    </div>
-                    <div class="mt-4 text-sm text-gray-500" id="outputInfo">
-                        Ready to generate JSON-LD
-                    </div>
+                <div class="mt-4 text-sm text-gray-500" id="outputInfo">
+                    Ready to generate JSON-LD
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Statistics Panel -->
-        <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Processing Statistics</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <div class="bg-blue-50 rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold text-blue-600" id="annotationCount">0</div>
-                    <div class="text-sm text-gray-600">Annotations</div>
-                </div>
-                <div class="bg-green-50 rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold text-green-600" id="faqCount">0</div>
-                    <div class="text-sm text-gray-600">FAQ Items</div>
-                </div>
-                <div class="bg-purple-50 rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold text-purple-600" id="sectionCount">0</div>
-                    <div class="text-sm text-gray-600">Sections</div>
-                </div>
-                <div class="bg-orange-50 rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold text-orange-600" id="tableCount">0</div>
-                    <div class="text-sm text-gray-600">Tables</div>
-                </div>
-                <div class="bg-pink-50 rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold text-pink-600" id="listCount">0</div>
-                    <div class="text-sm text-gray-600">Lists</div>
-                </div>
-                <div class="bg-indigo-50 rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold text-indigo-600" id="entityCount">0</div>
-                    <div class="text-sm text-gray-600">Total Entities</div>
-                </div>
+    <!-- Statistics Panel -->
+    <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Processing Statistics</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div class="bg-blue-50 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-blue-600" id="annotationCount">0</div>
+                <div class="text-sm text-gray-600">Annotations</div>
+            </div>
+            <div class="bg-green-50 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-green-600" id="faqCount">0</div>
+                <div class="text-sm text-gray-600">FAQ Items</div>
+            </div>
+            <div class="bg-purple-50 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-purple-600" id="sectionCount">0</div>
+                <div class="text-sm text-gray-600">Sections</div>
+            </div>
+            <div class="bg-orange-50 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-orange-600" id="tableCount">0</div>
+                <div class="text-sm text-gray-600">Tables</div>
+            </div>
+            <div class="bg-pink-50 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-pink-600" id="listCount">0</div>
+                <div class="text-sm text-gray-600">Lists</div>
+            </div>
+            <div class="bg-indigo-50 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-indigo-600" id="entityCount">0</div>
+                <div class="text-sm text-gray-600">Total Entities</div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="container mx-auto px-6 text-center">
-            <p class="text-gray-300">Enhanced Metadata Extractor - Transform your content into structured data</p>
-            <p class="text-gray-400 text-sm mt-2">Enter markdown content or click sample buttons to get started. YAML metadata auto-populates form fields.</p>
-        </div>
-    </footer>
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-8 mt-12">
+    <div class="container mx-auto px-6 text-center">
+        <p class="text-gray-300">Enhanced Metadata Extractor - Transform your content into structured data</p>
+        <p class="text-gray-400 text-sm mt-2">Enter markdown content or click sample buttons to get started. YAML metadata auto-populates form fields.</p>
+    </div>
+</footer>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    <!-- Load the library directly as a script -->
-    <script src="../lib/dist/markdown-to-json-ld.js"></script>
-    <script type="module" src="./js/ui-controller.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<!-- Load the library directly as a script -->
+<script src="../lib/dist/markdown-to-json-ld.js"></script>
+<script type="module" src="./js/ui-controller.js"></script>
 </body>
 </html>

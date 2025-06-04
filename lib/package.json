@@ -1,6 +1,6 @@
 {
   "name": "markdown-to-json-ld",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transform Markdown to JSON-LD with Advanced Table & Annotation Support",
   "main": "dist/markdown-to-json-ld.js",
   "files": [
@@ -23,7 +23,7 @@
     "seo"
   ],
   "author": "Iunera",
-  "license": "ISC",
+  "license": "OCTL",
   "type": "module",
   "dependencies": {
     "js-yaml": "^4.1.0"
