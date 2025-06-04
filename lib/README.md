@@ -1,13 +1,71 @@
 # markdown-to-json-ld
 
-Transform Markdown to JSON-LD with Advanced Table & Annotation Support
+Transform Markdown to JSON-LD with Advanced Table & Annotation Support for JavaScript developers optimizing for AI.
 
-This is the npm package for the [json-ld-markdown](https://github.com/iunera/json-ld-markdown) project.
+This [project of iunera](https://www.iunera.com) is the npm package for the [json-ld-markdown](https://github.com/iunera/json-ld-markdown) project. 
 
 ## Installation
 
 ```bash
 npm install markdown-to-json-ld
+```
+
+## CDN Usage
+
+You can also use this library directly from a CDN without installing it locally:
+
+```html
+<!-- Include the library from unpkg CDN -->
+<script src="https://unpkg.com/markdown-to-json-ld@1.0.2/dist/markdown-to-json-ld.js"></script>
+```
+
+When loaded via CDN, the library is available as a global variable `window.MarkdownToJsonLd` with the following components:
+
+```javascript
+// Access the components
+const EnhancedMarkdownParser = window.MarkdownToJsonLd.EnhancedMarkdownParser;
+const JsonLDTransformer = window.MarkdownToJsonLd.JsonLDTransformer;
+
+// Use the transformer
+const jsonLd = window.MarkdownToJsonLd.JsonLDTransformer.transform(markdownContent, config);
+```
+
+### Example HTML Integration
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Markdown to JSON-LD Example</title>
+</head>
+<body>
+    <!-- Your HTML content -->
+
+    <!-- Include the library from CDN -->
+    <script src="https://unpkg.com/markdown-to-json-ld@1.0.2/dist/markdown-to-json-ld.js"></script>
+
+    <script>
+        // Your markdown content
+        const markdown = `# My Article\n\nThis is content.`;
+
+        // Configuration
+        const config = {
+            type: 'Article',
+            author: ['John Doe'],
+            publisher: {
+                name: 'Example Publisher',
+                url: 'https://example.com'
+            }
+        };
+
+        // Transform markdown to JSON-LD
+        const jsonLd = window.MarkdownToJsonLd.JsonLDTransformer.transform(markdown, config);
+
+        // Use the result
+        console.log(jsonLd);
+    </script>
+</body>
+</html>
 ```
 
 ## Usage
@@ -237,4 +295,3 @@ This project is licensed under the Open Compensation Token License (OCTL), with 
 at [https://www.license-token.com/license/new-procurement/x-octl-sid%3A5fecd757-5fec-d757-d757-00005fb33b80](https://www.license-token.com/license/new-procurement/x-octl-sid%3A5fecd757-5fec-d757-d757-00005fb33b80).
 See the [LICENSE](LICENSE) file or [OCTL license text](https://github.com/open-compensation-token-license/license/blob/main/LICENSE.md) for details. For OCTL
 compliance, ensure contributions are registered with the project’s `x-octl-sid` using the license token link.
-

@@ -20,12 +20,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Metadata Extractor</title>
+    <title>Markdown to Schema.org JSON-LD for AI SEO</title>
+    <meta name="description" content="Generate structured data from your markdown for AI ingestion with advanced table and annotation support. Improve your SEO with Schema.org JSON-LD.">
+    <meta name="keywords" content="JSON-LD, Markdown, Schema.org, Structured Data, SEO, Metadata">
+    <meta name="author" content="Iunera">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://iunera.github.io/json-ld-markdown/">
+    <meta property="og:title" content="Markdown to Schema.org JSON-LD for AI SEO">
+    <meta property="og:description" content="Generate structured data from your markdown for AI ingestion with advanced table and annotation support. Improve your SEO with Schema.org JSON-LD.">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://iunera.github.io/json-ld-markdown/">
+    <meta property="twitter:title" content="Markdown to Schema.org JSON-LD for AI SEO">
+    <meta property="twitter:description" content="Generate structured data from your markdown for AI ingestion with advanced table and annotation support. Improve your SEO with Schema.org JSON-LD.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%234f46e5' d='M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-1 10.199l-3.64 1.801 3.64 1.796v2.204l-6-3v-2l6-3v2.199zm2 0v-2.199l6 3v2l-6 3v-2.204l3.64-1.796-3.64-1.801z'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%234f46e5' d='M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-1 10.199l-3.64 1.801 3.64 1.796v2.204l-6-3v-2l6-3v2.199zm2 0v-2.199l6 3v2l-6 3v-2.204l3.64-1.796-3.64-1.801z'/%3E%3C/svg%3E" sizes="180x180">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Markdown to Schema.org JSON-LD for AI SEO",
+      "url": "https://iunera.github.io/json-ld-markdown/",
+      "description": "Generate structured data from your markdown for AI ingestion with advanced table and annotation support. Improve your SEO with Schema.org JSON-LD.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Iunera",
+        "url": "https://www.iunera.com"
+      },
+      "keywords": "JSON-LD, Markdown, Schema.org, Structured Data, SEO, Metadata",
+      "softwareVersion": "1.0.2",
+      "license": "https://github.com/open-compensation-token-license/license/blob/main/LICENSE.md"
+    }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        },
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         .hljs {
             background: #1f2937 !important;
@@ -60,7 +134,7 @@
 
         textarea:focus, input:focus, select:focus {
             transform: scale(1.01);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
 
         .status-indicator {
@@ -83,147 +157,236 @@
             background-color: #f59e0b;
             animation: pulse 1s infinite;
         }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+<body class="bg-gradient-to-br from-primary-50 to-indigo-100 min-h-screen font-sans">
 <!-- Header -->
-<header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
-    <div class="container mx-auto px-6 py-4">
-        <h1 class="text-3xl font-bold text-center">Enhanced Metadata Extractor</h1>
-        <p class="text-center text-blue-100 mt-2">Transform Markdown to JSON-LD with Advanced Table & Annotation Support</p>
+<header class="relative bg-gradient-to-r from-primary-600 to-indigo-700 text-white shadow-xl">
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute left-0 top-0 w-full h-full opacity-10">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="absolute top-0 left-0 w-full">
+                <path fill="rgba(255,255,255,0.2)" fill-opacity="1" d="M0,192L48,176C96,160,192,128,288,122.7C384,117,480,139,576,165.3C672,192,768,224,864,213.3C960,203,1056,149,1152,138.7C1248,128,1344,160,1392,176L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </div>
+    <div class="container mx-auto px-6 py-6 relative z-10">
+        <div class="flex flex-col items-center">
+            <div class="flex items-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight">Markdown to Schema.org JSON-LD for AI SEO</h1>
+            </div>
+            <div class="flex items-center">
+                <span class="text-xl text-primary-100">by</span>
+                <a href="https://www.iunera.com" target="_blank"  class="ml-2 text-xl font-semibold text-white hover:text-primary-200 transition-colors">Iunera</a>
+            </div>
+            <p class="text-center text-primary-100 mt-2 max-w-2xl text-lg">Generate structured data from your markdown for AI ingestion</p>
+            <div class="mt-3 flex space-x-4">
+                <a href="#configuration" class="px-5 py-2 bg-white text-primary-700 rounded-lg shadow-md hover:bg-primary-50 transition-colors font-medium">Get Started</a>
+                <a href="#resources" class="px-5 py-2 bg-primary-700 text-white rounded-lg shadow-md hover:bg-primary-800 transition-colors font-medium">Learn More</a>
+            </div>
+        </div>
     </div>
 </header>
 
 <!-- Main Content -->
-<main class="container mx-auto px-6 py-8">
+<main class="container mx-auto px-6 py-6">
     <!-- Configuration Panel -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            ⚙️ Configuration
-            <span id="configStatus" class="status-indicator status-success"></span>
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-            <div>
-                <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Schema Type</label>
-                <select id="type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="Article" selected>Article</option>
-                    <option value="NewsArticle">NewsArticle</option>
-                    <option value="BlogPosting">BlogPosting</option>
-                    <option value="TechArticle">TechArticle</option>
-                    <option value="ScholarlyArticle">ScholarlyArticle</option>
-                    <option value="HowTo">HowTo</option>
-                    <option value="Report">Report</option>
-                    <option value="SocialMediaPosting">SocialMediaPosting</option>
-                    <option value="MedicalScholarlyArticle">MedicalScholarlyArticle</option>
-                    <option value="SatiricalArticle">SatiricalArticle</option>
-                    <option value="AdvertiserContentArticle">AdvertiserContentArticle</option>
-                    <option value="WebPage">WebPage</option>
-                </select>
+    <div id="configuration" class="bg-white rounded-xl shadow-lg p-5 mb-8 transform transition-all duration-300 card-hover">
+        <div class="flex items-center justify-between mb-3 border-b border-gray-100 pb-2">
+            <div class="flex items-center">
+                <span class="text-2xl mr-3">⚙️</span>
+                <h2 class="text-2xl font-bold text-gray-800">Configuration</h2>
+                <span id="configStatus" class="status-indicator status-success ml-3"></span>
             </div>
-            <div>
-                <label for="author" class="block text-sm font-medium text-gray-700 mb-2">Authors</label>
-                <input type="text" id="author" placeholder="John Doe, Jane Smith"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label for="publisherName" class="block text-sm font-medium text-gray-700 mb-2">Publisher</label>
-                <input type="text" id="publisherName" placeholder="Your Organization"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label for="publisherUrl" class="block text-sm font-medium text-gray-700 mb-2">Publisher URL</label>
-                <input type="url" id="publisherUrl" placeholder="https://example.com"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label for="baseUrl" class="block text-sm font-medium text-gray-700 mb-2">Base URL</label>
-                <input type="url" id="baseUrl" placeholder="https://example.com/blog/"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Article Slug</label>
-                <input type="text" id="slug" placeholder="my-article-title"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <div class="text-sm text-gray-500">
+                Settings will be applied automatically
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            <div>
-                <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Publication Date</label>
-                <input type="date" id="date"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <div class="mb-4">
+            <h3 class="text-lg font-semibold text-primary-700 mb-2">Content Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Schema Type</label>
+                    <select id="type" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                        <option value="Article" selected>Article</option>
+                        <option value="NewsArticle">NewsArticle</option>
+                        <option value="BlogPosting">BlogPosting</option>
+                        <option value="TechArticle">TechArticle</option>
+                        <option value="ScholarlyArticle">ScholarlyArticle</option>
+                        <option value="HowTo">HowTo</option>
+                        <option value="Report">Report</option>
+                        <option value="SocialMediaPosting">SocialMediaPosting</option>
+                        <option value="MedicalScholarlyArticle">MedicalScholarlyArticle</option>
+                        <option value="SatiricalArticle">SatiricalArticle</option>
+                        <option value="AdvertiserContentArticle">AdvertiserContentArticle</option>
+                        <option value="WebPage">WebPage</option>
+                    </select>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Publication Date</label>
+                    <input type="date" id="date"
+                           class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <label for="categories" class="block text-sm font-medium text-gray-700 mb-1">Categories</label>
+                    <input type="text" id="categories" placeholder="Technology, AI, Innovation"
+                           class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                </div>
             </div>
-            <div>
-                <label for="categories" class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
-                <input type="text" id="categories" placeholder="Technology, AI, Innovation"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+
+        <div class="mb-4">
+            <h3 class="text-lg font-semibold text-primary-700 mb-2">Author & Publisher</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Authors</label>
+                    <input type="text" id="author" placeholder="John Doe, Jane Smith"
+                           class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <label for="publisherName" class="block text-sm font-medium text-gray-700 mb-1">Publisher</label>
+                    <input type="text" id="publisherName" placeholder="Your Organization"
+                           class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <label for="publisherUrl" class="block text-sm font-medium text-gray-700 mb-1">Publisher URL</label>
+                    <input type="url" id="publisherUrl" placeholder="https://example.com"
+                           class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                </div>
             </div>
-            <div>
-                <label for="descLength" class="block text-sm font-medium text-gray-700 mb-2">Description Length</label>
-                <input type="number" id="descLength" value="300" min="50" max="1000"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+
+        <div>
+            <h3 class="text-lg font-semibold text-primary-700 mb-2">URL & Description</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <label for="baseUrl" class="block text-sm font-medium text-gray-700 mb-1">Base URL</label>
+                    <input type="url" id="baseUrl" placeholder="https://example.com/blog/"
+                           class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <label for="slug" class="block text-sm font-medium text-gray-700 mb-1">Article Slug</label>
+                    <input type="text" id="slug" placeholder="my-article-title"
+                           class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <input type="text" id="description" placeholder="Enter description or leave empty to use first 200 words"
+                           class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Main Processing Area -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <!-- Input Panel -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div class="bg-gray-50 px-6 py-4 border-b">
-                <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                    📝 Markdown Input
-                    <span id="inputStatus" class="status-indicator status-success"></span>
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Enter your markdown with YAML front matter and inline annotations, or use the sample buttons below</p>
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 card-hover">
+            <div class="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-5 border-b">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-white text-xl mr-3">📝</span>
+                        <h3 class="text-xl font-bold text-white">Markdown Input</h3>
+                        <span id="inputStatus" class="status-indicator status-success ml-2"></span>
+                    </div>
+                    <div class="text-sm text-white opacity-90">
+                        <span id="charCount" class="font-semibold">0</span> characters
+                    </div>
+                </div>
+                <p class="text-sm text-white text-opacity-90 mt-1">Enter your markdown with YAML front matter and inline annotations</p>
             </div>
             <div class="p-6">
-                    <textarea id="markdownInput" rows="25"
-                              class="w-full font-mono text-sm border border-gray-300 rounded-lg p-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                <div class="relative">
+                    <textarea id="markdownInput" rows="22"
+                              class="w-full font-mono text-sm border border-gray-300 rounded-lg p-5 focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none bg-gray-50"
                               placeholder="Enter your markdown content here..."></textarea>
-                <div class="mt-4 flex items-center justify-between">
-                    <div class="flex gap-2">
-                        <button id="loadSample" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                    <div class="absolute top-2 right-2 bg-white bg-opacity-80 px-2 py-1 rounded text-xs text-gray-500">
+                        Markdown
+                    </div>
+                </div>
+                <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap gap-2">
+                        <button id="loadSample" class="px-4 py-2 bg-primary-50 text-primary-700 rounded-lg hover:bg-primary-100 transition-colors font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
                             Article Sample
                         </button>
-                        <button id="loadHowToSample" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
+                        <button id="loadHowToSample" class="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
                             HowTo Sample
                         </button>
-                        <button id="loadTableSample" class="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
+                        <button id="loadTableSample" class="px-4 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
                             Table Sample
                         </button>
                     </div>
                     <div class="text-sm text-gray-500">
-                        <span id="charCount">0</span> characters
+                        Auto-processing enabled
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Output Panel -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div class="bg-gray-50 px-6 py-4 border-b">
-                <h3 class="text-lg font-semibold text-gray-800 flex items-center justify-between">
-                        <span class="flex items-center">
-                            🔗 JSON-LD Output
-                            <span id="outputStatus" class="status-indicator status-success"></span>
-                        </span>
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 card-hover">
+            <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 px-6 py-5 border-b">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-white text-xl mr-3">🔗</span>
+                        <h3 class="text-xl font-bold text-white">JSON-LD Output</h3>
+                        <span id="outputStatus" class="status-indicator status-success ml-2"></span>
+                    </div>
                     <div class="flex gap-2">
-                        <button id="formatButton" class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors">
+                        <button id="formatButton" class="px-3 py-1.5 bg-white text-indigo-700 rounded-lg hover:bg-indigo-50 transition-colors text-sm font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                            </svg>
                             Format
                         </button>
-                        <button id="copyButton" class="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors">
+                        <button id="copyButton" class="px-3 py-1.5 bg-white text-indigo-700 rounded-lg hover:bg-indigo-50 transition-colors text-sm font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
                             Copy
                         </button>
                     </div>
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Generated structured data in JSON-LD format</p>
+                </div>
+                <p class="text-sm text-white text-opacity-90 mt-1">Generated structured data in JSON-LD format</p>
             </div>
             <div class="p-6">
-                <div class="bg-gray-900 rounded-lg overflow-hidden">
-                    <pre><code id="output" class="language-json text-sm"></code></pre>
+                <div class="bg-gray-900 rounded-lg overflow-hidden shadow-inner relative">
+                    <pre><code id="output" class="language-json text-sm p-5"></code></pre>
+                    <div class="absolute top-2 right-2 bg-gray-800 bg-opacity-80 px-2 py-1 rounded text-xs text-gray-300">
+                        JSON-LD
+                    </div>
                 </div>
-                <div class="mt-4 text-sm text-gray-500" id="outputInfo">
+                <div class="mt-4 text-sm text-gray-600 flex items-center" id="outputInfo">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                     Ready to generate JSON-LD
                 </div>
             </div>
@@ -231,52 +394,246 @@
     </div>
 
     <!-- Statistics Panel -->
-    <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Processing Statistics</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <div class="bg-blue-50 rounded-lg p-4 text-center">
-                <div class="text-2xl font-bold text-blue-600" id="annotationCount">0</div>
-                <div class="text-sm text-gray-600">Annotations</div>
+    <div class="mt-16 bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300 card-hover">
+        <div class="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
+            <div class="flex items-center">
+                <span class="text-2xl mr-3">📊</span>
+                <h2 class="text-2xl font-bold text-gray-800">Processing Statistics</h2>
             </div>
-            <div class="bg-green-50 rounded-lg p-4 text-center">
-                <div class="text-2xl font-bold text-green-600" id="faqCount">0</div>
-                <div class="text-sm text-gray-600">FAQ Items</div>
+            <div class="text-sm text-gray-500">
+                Auto-updated as you type
             </div>
-            <div class="bg-purple-50 rounded-lg p-4 text-center">
-                <div class="text-2xl font-bold text-purple-600" id="sectionCount">0</div>
-                <div class="text-sm text-gray-600">Sections</div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+            <div class="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-5 text-center transform transition-all duration-300 hover:scale-105 shadow-sm">
+                <div class="flex justify-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-primary-600" id="annotationCount">0</div>
+                <div class="text-sm font-medium text-primary-800 mt-1">Annotations</div>
             </div>
-            <div class="bg-orange-50 rounded-lg p-4 text-center">
-                <div class="text-2xl font-bold text-orange-600" id="tableCount">0</div>
-                <div class="text-sm text-gray-600">Tables</div>
+
+            <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 text-center transform transition-all duration-300 hover:scale-105 shadow-sm">
+                <div class="flex justify-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-green-600" id="faqCount">0</div>
+                <div class="text-sm font-medium text-green-800 mt-1">FAQ Items</div>
             </div>
-            <div class="bg-pink-50 rounded-lg p-4 text-center">
-                <div class="text-2xl font-bold text-pink-600" id="listCount">0</div>
-                <div class="text-sm text-gray-600">Lists</div>
+
+            <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 text-center transform transition-all duration-300 hover:scale-105 shadow-sm">
+                <div class="flex justify-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-purple-600" id="sectionCount">0</div>
+                <div class="text-sm font-medium text-purple-800 mt-1">Sections</div>
             </div>
-            <div class="bg-indigo-50 rounded-lg p-4 text-center">
-                <div class="text-2xl font-bold text-indigo-600" id="entityCount">0</div>
-                <div class="text-sm text-gray-600">Total Entities</div>
+
+            <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-5 text-center transform transition-all duration-300 hover:scale-105 shadow-sm">
+                <div class="flex justify-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-orange-600" id="tableCount">0</div>
+                <div class="text-sm font-medium text-orange-800 mt-1">Tables</div>
+            </div>
+
+            <div class="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-5 text-center transform transition-all duration-300 hover:scale-105 shadow-sm">
+                <div class="flex justify-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-pink-600" id="listCount">0</div>
+                <div class="text-sm font-medium text-pink-800 mt-1">Lists</div>
+            </div>
+
+            <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-5 text-center transform transition-all duration-300 hover:scale-105 shadow-sm">
+                <div class="flex justify-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-indigo-600" id="entityCount">0</div>
+                <div class="text-sm font-medium text-indigo-800 mt-1">Total Entities</div>
             </div>
         </div>
     </div>
 </main>
 
+<!-- Resources Section -->
+<section id="resources" class="bg-gradient-to-b from-primary-50 to-indigo-50 py-16 mt-16 border-t border-primary-100">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-3">Resources</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Explore these resources to learn more about the markdown-to-json-ld library and how to use it in your projects.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div class="bg-white p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <div class="flex items-center mb-4">
+                    <div class="bg-primary-100 p-3 rounded-lg mr-4">
+                        <svg class="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">GitHub Repository</h3>
+                </div>
+
+                <p class="text-gray-600 mb-6">
+                    Our GitHub repository contains the complete source code for the markdown-to-json-ld library. 
+                    Visit to explore the implementation, report issues, suggest improvements, or contribute to the project. 
+                    The repository includes examples, documentation, and the website code you're currently using.
+                </p>
+
+                <div class="flex items-center justify-between">
+                    <a href="https://github.com/iunera/json-ld-markdown" target="_blank"  class="px-5 py-2 bg-primary-600 text-white rounded-lg shadow-md hover:bg-primary-700 transition-colors font-medium flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        View on GitHub
+                    </a>
+                    <span class="text-xs text-gray-500">Last updated: June 2023</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <div class="flex items-center mb-4">
+                    <div class="bg-red-100 p-3 rounded-lg mr-4">
+                        <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0v24h24v-24h-24zm13 21h-2v-9h-3v9h-5v-18h10v18zm8 0h-5v-18h5v18z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">NPM Package</h3>
+                </div>
+
+                <p class="text-gray-600 mb-6">
+                    The NPM package allows you to integrate the markdown-to-json-ld library into your own projects.
+                    Install it using npm or yarn to transform Markdown content with YAML front matter into structured JSON-LD data.
+                    The package is regularly updated and includes all the features demonstrated on this website.
+                </p>
+
+                <div class="flex items-center justify-between">
+                    <a href="https://www.npmjs.com/package/markdown-to-json-ld" target="_blank"  class="px-5 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition-colors font-medium flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0v24h24v-24h-24zm13 21h-2v-9h-3v9h-5v-18h10v18zm8 0h-5v-18h5v18z"/>
+                        </svg>
+                        View on NPM
+                    </a>
+                    <div class="bg-gray-100 px-3 py-1 rounded-lg text-xs font-mono text-gray-700">npm install markdown-to-json-ld</div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <div class="flex items-center mb-4">
+                    <div class="bg-green-100 p-3 rounded-lg mr-4">
+                        <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-1.25 17.292l-4.5-4.364 1.857-1.858 2.643 2.506 5.643-5.784 1.857 1.857-7.5 7.643z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">OCTL License</h3>
+                </div>
+
+                <p class="text-gray-600 mb-6">
+                    This project is licensed under the Open Compensation Token License (OCTL), which enables blockchain-based licensing and royalty distribution via NFTs. 
+                    OCTL ensures fair compensation for developers while maintaining open source principles.
+                    The project's unique identifier (SID) is: <span class="font-mono text-xs bg-gray-100 px-2 py-1 rounded">5fecd757-5fec-d757-d757-00005fb33b80</span>
+                </p>
+
+                <div class="flex items-center justify-between">
+                    <a href="http://www.license-token.com" target="_blank"  target="_blank"  class="px-5 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-colors font-medium flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Learn about OCTL
+                    </a>
+                    <span class="text-xs text-gray-500">Fair code, fair payment</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 text-center">
+            <a href="https://www.iunera.com" target="_blank"  class="text-primary-600 hover:text-primary-800 font-medium flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Learn more about Iunera
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- Footer -->
-<footer class="bg-gray-800 text-white py-8 mt-12">
-    <div class="container mx-auto px-6 text-center">
-        <p class="text-gray-300">Enhanced Metadata Extractor - Transform your content into structured data</p>
-        <p class="text-gray-400 text-sm mt-2">Enter markdown content or click sample buttons to get started. YAML metadata auto-populates form fields.</p>
+<footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12 mt-16">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4 text-white">Markdown to Schema.org JSON-LD for AI SEO</h3>
+                <p class="text-gray-300 mb-4">Generate structured data from your markdown for AI ingestion with advanced table and annotation support.</p>
+                <div class="flex space-x-4">
+                    <a href="https://github.com/iunera/json-ld-markdown" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.npmjs.com/package/markdown-to-json-ld" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0v24h24v-24h-24zm13 21h-2v-9h-3v9h-5v-18h10v18zm8 0h-5v-18h5v18z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold mb-4 text-white">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li><a href="#configuration" class="text-gray-300 hover:text-white transition-colors">Configuration</a></li>
+                    <li><a href="#resources" class="text-gray-300 hover:text-white transition-colors">Resources</a></li>
+                    <li><a href="https://json-ld.org/" target="_blank" class="text-gray-300 hover:text-white transition-colors">JSON-LD.org</a></li>
+                    <li><a href="https://validator.schema.org/" target="_blank" class="text-gray-300 hover:text-white transition-colors">Schema.org Validator</a></li>
+                    <li><a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data" target="_blank" class="text-gray-300 hover:text-white transition-colors">Google Structured Data</a></li>
+                    <li><a href="https://www.markdownguide.org/basic-syntax/" target="_blank" class="text-gray-300 hover:text-white transition-colors">Markdown Guide</a></li>
+                    <li><a href="https://www.forbes.com/sites/janakirammsv/2025/05/21/microsoft-launches-nlweb-to-simplify-website-agent-interactions/" target="_blank" class="text-gray-300 hover:text-white transition-colors">Microsoft NLWeb (Forbes)</a></li>
+                    <li><a href="https://github.com/iunera/json-ld-markdown/blob/main/README.md" target="_blank" class="text-gray-300 hover:text-white transition-colors">Documentation</a></li>
+                    <li><a href="https://github.com/iunera/json-ld-markdown/issues" target="_blank" class="text-gray-300 hover:text-white transition-colors">Report Issues</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold mb-4 text-white">Getting Started</h3>
+                <p class="text-gray-300 mb-4">Enter markdown content or click sample buttons to get started. YAML metadata auto-populates form fields.</p>
+                <div class="bg-gray-700 p-3 rounded-lg text-xs font-mono text-gray-300">
+                    npm install markdown-to-json-ld
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2023 Iunera. All rights reserved.</p>
+            <div class="flex items-center">
+                <span class="text-gray-400 text-sm mr-2">Powered by</span>
+                <a href="https://www.iunera.com" target="_blank" class="text-primary-300 hover:text-primary-200 transition-colors font-medium">Iunera</a>
+            </div>
+        </div>
     </div>
 </footer>
 
+<!-- Scripts -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-<!-- Load the library directly as a script -->
-<script src="../lib/dist/markdown-to-json-ld.js"></script>
+<!-- Load the library from CDN -->
+<script src="https://unpkg.com/markdown-to-json-ld@1.0.2/dist/markdown-to-json-ld.js"></script>
 <script type="module" src="./js/ui-controller.js"></script>
 </body>
 </html>
