@@ -1,0 +1,30 @@
+{
+  "name": "markdown-to-json-ld",
+  "version": "1.0.0",
+  "description": "Transform Markdown to JSON-LD with Advanced Table & Annotation Support",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production"
+  },
+  "keywords": [
+    "markdown",
+    "json-ld",
+    "schema.org",
+    "structured-data",
+    "seo"
+  ],
+  "author": "Iunera",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.10",
+    "@babel/preset-env": "^7.22.10",
+    "babel-loader": "^9.1.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
