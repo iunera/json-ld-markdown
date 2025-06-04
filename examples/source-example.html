@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Metadata Extractor</title>
+    <title>Enhanced Metadata Extractor - Source Example</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -52,6 +52,7 @@
         <div class="container mx-auto px-6 py-4">
             <h1 class="text-3xl font-bold text-center">Enhanced Metadata Extractor</h1>
             <p class="text-center text-blue-100 mt-2">Transform Markdown to JSON-LD with Advanced Table & Annotation Support</p>
+            <p class="text-center text-blue-100 mt-1">Source Example - Using the individual source files</p>
         </div>
     </header>
 
@@ -231,16 +232,14 @@
         </div>
     </footer>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    <script src="../../markdown-to-json-ld/dist/markdown-to-json-ld.js"></script>
-    <script>
+    <!-- Scripts - Import source files directly -->
+    <script type="module">
+
+        import { UIController } from '../markdown-to-json-ld/src/ui-controller.js';
+
         // Initialize the application when the DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
-            // The UIController is automatically initialized by the library
+            new UIController();
         });
     </script>
 </body>
