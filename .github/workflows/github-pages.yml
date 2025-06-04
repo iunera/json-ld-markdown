@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - main  # Set this to your default branch
-    paths:
-      - 'website/**'  # Only run when files in website directory or subdirectories change
+#    paths:
+#      - 'website/**'  # Only run when files in website directory or subdirectories change
   workflow_dispatch:  # Allow manual triggering
 
 permissions:
   contents: read
   pages: write
-  id-token: write
+  id-token: false
 
 # Allow only one concurrent deployment
 concurrency:
@@ -27,16 +27,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload the website directory
           path: './website'
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
