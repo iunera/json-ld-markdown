@@ -1,6 +1,6 @@
 # markdown-to-json-ld
 
-Transform Markdown to JSON-LD with Advanced Table & Annotation Support
+Transform Markdown to JSON-LD with Advanced Table & Annotation Support for JavaScript developers optimizing for AI.
 
 This is the npm package for the [json-ld-markdown](https://github.com/iunera/json-ld-markdown) project.
 
