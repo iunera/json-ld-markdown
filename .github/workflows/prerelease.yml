@@ -10,14 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get current version
         id: get-version
         run: echo "version=$(node -p "require('./lib/package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
 
@@ -36,7 +36,7 @@ jobs:
           echo "prerelease_version=${PRERELEASE_VERSION}" >> $GITHUB_OUTPUT
           # Update package.json with prerelease version
           cd lib && npm version ${PRERELEASE_VERSION} --no-git-tag-version
-          
+
       - name: Publish prerelease to NPM
         run: cd lib && npm publish --dry-run
         env:
