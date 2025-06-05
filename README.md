@@ -4,11 +4,11 @@
 
 ## Overview
 
-The **markdown-to-structured-jsonld** project transforms non-annotated Markdown files into structured JSON-LD data, primarily using Schema.org but extendable to other schemas (e.g., Dublin Core). This README describes the **Default Markdown to Structured JSON-LD Transformation**, which maps Markdown structures (e.g., articles, FAQs) to Schema.org types (e.g., `Article`, `NewsArticle`, `FAQPage`) using YAML front matter and document content, or minimal inference for plain Markdown. This way, markdown files can be transformed easily and allow simple semantic data extraction for AI-driven applications like [NLWeb’s conversational AI](https://www.iunera.com/kraken/category/nlweb/). The transformation uses Markdown as the root format to generate multiple outputs (JSON-LD, HTML, Java objects) and is compatible with traditional Markdown renderers (e.g., GitHub, CommonMark).
+The **markdown-to-structured-jsonld** project transforms non-annotated Markdown files into [structured Ai-training-ready-data, compliant to JSON-LD Schema.org](https://markdown-to-jsonld-ai.iunera.com/). However, we aim that it is extendable to other schemas (e.g., Dublin Core). This README describes the **Default Markdown to Structured Data JSON-LD Transformation**, which maps Markdown structures (e.g., articles, FAQs) to Structure Data Schema.org types (e.g., `Article`, `NewsArticle`, `FAQPage`) using YAML front matter and document content, or minimal inference for plain Markdown. This way, markdown files can be transformed easily and allow simple semantic data extraction for AI-driven applications like [NLWeb’s conversational AI](https://www.iunera.com/kraken/category/nlweb/). The transformation uses Markdown as the root format to generate multiple outputs (JSON-LD, HTML, Java objects) and is compatible with traditional Markdown renderers (e.g., GitHub, CommonMark). 
 
 An extended Markdown format with inline annotations (e.g., `[text]@{Type,property=value}`) is available for explicit tagging. See the extended specification for details.
 
-This specification is created in formal and precise way, hoping to enable all AI systems to create parsers or transformers for the format.
+This specification is created in formal and precise way, hoping to enable all [AI systems to create parsers or transformers for the markdown format that it can be transformed into AI optimized Schema.org Datatypes](https://markdown-to-jsonld-ai.iunera.com/). 
 
 This project is the based of the [Markdown to Schema.org JSON-LD for AI SEO website](https://markdown-to-jsonld-ai.iunera.com/).
 
