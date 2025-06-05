@@ -5,9 +5,9 @@
 This [project of iunera](https://www.iunera.com) is the npm package for the [json-ld-markdown](https://github.com/iunera/json-ld-markdown) project. This lib is
 powering the Markdown to [Schema.org JSON-LD for AI SEO website](https://markdown-to-jsonld-ai.iunera.com/). 
 
-The idea behind this project is to make it easy for developers to transform Markdown content to JSON-LD, which enhances the processability of their content in AI, Large Language Models (LLMs), and Natural Language Web (NLWeb) contexts. Here's an expanded explanation:
+The idea behind this project is to make it easy for developers to [transform Markdown content to JSON-LD, which enhances the processability of their content in AI, Large Language Models (LLMs), and Natural Language Web (NLWeb) contexts](https://www.iunera.com/kraken/machine-learning-ai/nlweb-enables-ai-powered-websites/). Here's an expanded explanation:
 
-### Why JSON-LD Matters for AI and LLMs
+### Why JSON-LD Matters for AI, LLMs and NLWeb
 JSON-LD (JavaScript Object Notation for Linked Data) provides structured data that can be more easily understood by machines. When content is transformed from Markdown to JSON-LD:
 1. **Enhanced AI Understanding**: AI systems can better comprehend the semantic meaning of content
 2. **Improved Search Engine Visibility**: Search engines like Google use structured data for rich results
